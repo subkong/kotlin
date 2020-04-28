@@ -640,10 +640,10 @@ class KotlinCoreEnvironment private constructor(
         fun registerKotlinLightClassSupport(project: MockProject) {
             with(project) {
                 val traceHolder = CliTraceHolder()
-                val cliLightClassGenerationSupport = CliLightClassGenerationSupport(traceHolder)
+//                val cliLightClassGenerationSupport = IDELightClassGenerationSupport(traceHolder)
                 val kotlinAsJavaSupport = CliKotlinAsJavaSupport(this, traceHolder)
-                registerService(LightClassGenerationSupport::class.java, cliLightClassGenerationSupport)
-                registerService(CliLightClassGenerationSupport::class.java, cliLightClassGenerationSupport)
+//                registerService(LightClassGenerationSupport::class.java, cliLightClassGenerationSupport)
+//                registerService(IDELightClassGenerationSupport::class.java, cliLightClassGenerationSupport)
                 registerService(KotlinAsJavaSupport::class.java, kotlinAsJavaSupport)
                 registerService(CodeAnalyzerInitializer::class.java, traceHolder)
 

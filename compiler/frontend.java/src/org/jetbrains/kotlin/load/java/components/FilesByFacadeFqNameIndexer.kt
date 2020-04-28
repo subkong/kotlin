@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.util.slicedMap.BasicWritableSlice
 import org.jetbrains.kotlin.util.slicedMap.Slices
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice
 
-// TODO: this component is actually only needed by CLI, see CliLightClassGenerationSupport
+// TODO: this component is actually only needed by CLI, see IDELightClassGenerationSupport
 class FilesByFacadeFqNameIndexer(private val trace: BindingTrace) : FilePreprocessorExtension {
     override fun preprocessFile(file: KtFile) {
         if (!file.hasTopLevelCallables()) return
