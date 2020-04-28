@@ -130,6 +130,10 @@ fun findScriptsWithUsages(declaration: KtNamedDeclaration): List<KtFile> {
         ?: return emptyList()
 
     val name = declaration.name.takeIf { it?.isNotBlank() == true } ?: return emptyList()
+    return findScriptsWithUsages(name, scope, project)
+}
+
+fun findScriptsWithUsages(name: String, scope: GlobalSearchScope, project: Project): List<KtFile> {
     val collector = CommonProcessors.CollectProcessor(ArrayList<VirtualFile>())
     runReadAction {
         FileBasedIndex.getInstance().getFilesWithKey(
