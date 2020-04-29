@@ -5,10 +5,12 @@
 
 package org.jetbrains.kotlin.idea.test
 
+import com.intellij.application.options.CodeStyle
 import com.intellij.ide.startup.impl.StartupManagerImpl
 import com.intellij.openapi.startup.StartupManager
 import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
+import org.jetbrains.kotlin.idea.formatter.KotlinStyleGuideCodeStyle
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.jetbrains.kotlin.test.TestMetadata
 import java.io.File
@@ -17,12 +19,14 @@ import kotlin.reflect.full.findAnnotation
 abstract class KotlinLightPlatformCodeInsightFixtureTestCase : LightPlatformCodeInsightFixtureTestCase() {
     override fun setUp() {
         super.setUp()
+        KotlinStyleGuideCodeStyle.apply(CodeStyle.getSettings(project))
         (StartupManager.getInstance(project) as StartupManagerImpl).runPostStartupActivities()
         VfsRootAccess.allowRootAccess(KotlinTestUtils.getHomeDirectory())
         invalidateLibraryCache(project)
     }
 
     override fun tearDown() {
+        CodeStyle.getSettings(project).clearCodeStyleSettings()
         VfsRootAccess.disallowRootAccess(KotlinTestUtils.getHomeDirectory())
 
         super.tearDown()

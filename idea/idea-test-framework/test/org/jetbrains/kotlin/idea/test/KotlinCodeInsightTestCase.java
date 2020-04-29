@@ -16,8 +16,10 @@
 
 package org.jetbrains.kotlin.idea.test;
 
+import com.intellij.application.options.CodeStyle;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess;
+import org.jetbrains.kotlin.idea.formatter.KotlinStyleGuideCodeStyle;
 import org.jetbrains.kotlin.test.KotlinTestUtils;
 
 import static org.jetbrains.kotlin.test.MuteWithDatabaseKt.isIgnoredInDatabaseWithLog;
@@ -31,10 +33,12 @@ public abstract class KotlinCodeInsightTestCase extends CodeInsightTestCase {
     protected void setUp() throws Exception {
         VfsRootAccess.allowRootAccess(KotlinTestUtils.getHomeDirectory());
         super.setUp();
+        KotlinStyleGuideCodeStyle.Companion.apply(CodeStyle.getSettings(getProject()));
     }
 
     @Override
     protected void tearDown() throws Exception {
+        CodeStyle.getSettings(getProject()).clearCodeStyleSettings();
         super.tearDown();
         VfsRootAccess.disallowRootAccess(KotlinTestUtils.getHomeDirectory());
     }

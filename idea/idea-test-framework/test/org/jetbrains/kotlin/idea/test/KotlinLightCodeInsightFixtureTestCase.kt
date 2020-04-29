@@ -77,6 +77,8 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
 
     override fun setUp() {
         super.setUp()
+
+        KotlinStyleGuideCodeStyle.apply(CodeStyle.getSettings(project))
         // We do it here to avoid possible initialization problems
         // UnusedSymbolInspection() calls IDEA UnusedDeclarationInspection() in static initializer,
         // which in turn registers some extensions provoking "modifications aren't allowed during highlighting"
@@ -102,7 +104,7 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
 
     override fun tearDown() {
         LoggedErrorProcessor.restoreDefaultProcessor()
-
+        CodeStyle.getSettings(project).clearCodeStyleSettings()
         super.tearDown()
 
         if (exceptions.isNotEmpty()) {
