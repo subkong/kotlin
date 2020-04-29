@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2019 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -12,7 +12,6 @@ import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInspection.InspectionEP
 import com.intellij.codeInspection.LocalInspectionEP
 import com.intellij.ide.highlighter.JavaFileType
-import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.fileTypes.PlainTextFileType
@@ -30,7 +29,9 @@ import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.quickfix.utils.findInspectionFile
 import org.jetbrains.kotlin.idea.test.DirectiveBasedActionUtils
 import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
+import org.jetbrains.kotlin.idea.test.configureKotlinOfficialCodeStyleAndRun
 import org.jetbrains.kotlin.idea.test.withCustomCompilerOptions
+import org.jetbrains.kotlin.idea.util.application.executeCommand
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.test.Directives
 import org.jetbrains.kotlin.test.KotlinTestUtils
@@ -133,9 +134,8 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
 
         configureMultiFileTest(subFiles, beforeFile)
         withCustomCompilerOptions(multiFileText, project, module) {
-            CommandProcessor.getInstance().executeCommand(
-                project,
-                {
+            configureKotlinOfficialCodeStyleAndRun(project) {
+                project.executeCommand("") {
                     try {
                         val psiFile = file
 
@@ -188,9 +188,8 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                         e.printStackTrace()
                         TestCase.fail(getTestName(true))
                     }
-                },
-                "", "",
-            )
+                }
+            }
         }
 
     }
@@ -214,9 +213,8 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
         myFixture.configureByFiles(*testFiles.toTypedArray())
 
         withCustomCompilerOptions(originalFileText, project, module) {
-            CommandProcessor.getInstance().executeCommand(
-                project,
-                {
+            configureKotlinOfficialCodeStyleAndRun(project) {
+                project.executeCommand("") {
                     try {
                         val psiFile = file
 
@@ -274,9 +272,8 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                         e.printStackTrace()
                         TestCase.fail(getTestName(true))
                     }
-                },
-                "", "",
-            )
+                }
+            }
         }
     }
 
