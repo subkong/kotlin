@@ -23,6 +23,7 @@ import junit.framework.TestCase
 import org.jetbrains.kotlin.idea.caches.resolve.ResolveInDispatchThreadException
 import org.jetbrains.kotlin.idea.caches.resolve.forceCheckForResolveInDispatchThreadInTests
 import org.jetbrains.kotlin.idea.facet.KotlinFacet
+import org.jetbrains.kotlin.idea.formatter.KotlinStyleGuideCodeStyle
 import org.jetbrains.kotlin.idea.test.*
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.test.InTextDirectivesUtils
@@ -53,14 +54,16 @@ abstract class AbstractQuickFixTest : KotlinLightCodeInsightFixtureTestCase(), Q
     protected fun doTest(beforeFileName: String) {
         val beforeFileText = FileUtil.loadFile(File(beforeFileName))
         withCustomCompilerOptions(beforeFileText, project, module) {
-            val inspections = parseInspectionsToEnable(beforeFileName, beforeFileText).toTypedArray()
-            try {
-                myFixture.enableInspections(*inspections)
+            configureCodeStyleAndRun(project, { KotlinStyleGuideCodeStyle.apply(it) }) {
+                val inspections = parseInspectionsToEnable(beforeFileName, beforeFileText).toTypedArray()
+                try {
+                    myFixture.enableInspections(*inspections)
 
-                doKotlinQuickFixTest(beforeFileName)
-                checkForUnexpectedErrors()
-            } finally {
-                myFixture.disableInspections(*inspections)
+                    doKotlinQuickFixTest(beforeFileName)
+                    checkForUnexpectedErrors()
+                } finally {
+                    myFixture.disableInspections(*inspections)
+                }
             }
         }
     }
